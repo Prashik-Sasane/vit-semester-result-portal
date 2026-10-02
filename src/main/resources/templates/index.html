@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>VIT Semester Result Portal</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">VIT University</p>
+          <h1>Semester Result Portal</h1>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel form-panel">
+          <h2>Student Result Entry</h2>
+
+          <form th:action="@{/save}" th:object="${resultRecord}" method="post">
+            <div class="row two-col">
+              <div>
+                <label>Student Name</label>
+                <input type="text" th:field="*{studentName}" required />
+              </div>
+              <div>
+                <label>Register Number</label>
+                <input type="text" th:field="*{registerNumber}" required />
+              </div>
+            </div>
+
+            <div class="row two-col">
+              <div>
+                <label>Semester</label>
+                <input type="text" th:field="*{semester}" placeholder="e.g. 5" required />
+              </div>
+            </div>
+
+            <h3>Subjects & Marks</h3>
+
+            <div class="subject-grid">
+              <div class="subject-card">
+                <h4>Data Structures</h4>
+                <label>MSE (30%)</label>
+                <input type="number" step="0.01" min="0" max="30" th:field="*{dataStructuresMSE}" required />
+                <label>ESE (70%)</label>
+                <input type="number" step="0.01" min="0" max="70" th:field="*{dataStructuresESE}" required />
+              </div>
+
+              <div class="subject-card">
+                <h4>DBMS</h4>
+                <label>MSE (30%)</label>
+                <input type="number" step="0.01" min="0" max="30" th:field="*{dbmsMSE}" required />
+                <label>ESE (70%)</label>
+                <input type="number" step="0.01" min="0" max="70" th:field="*{dbmsESE}" required />
+              </div>
+
+              <div class="subject-card">
+                <h4>Operating Systems</h4>
+                <label>MSE (30%)</label>
+                <input type="number" step="0.01" min="0" max="30" th:field="*{osMSE}" required />
+                <label>ESE (70%)</label>
+                <input type="number" step="0.01" min="0" max="70" th:field="*{osESE}" required />
+              </div>
+
+              <div class="subject-card">
+                <h4>Computer Networks</h4>
+                <label>MSE (30%)</label>
+                <input type="number" step="0.01" min="0" max="30" th:field="*{cnMSE}" required />
+                <label>ESE (70%)</label>
+                <input type="number" step="0.01" min="0" max="70" th:field="*{cnESE}" required />
+              </div>
+            </div>
+
+            <button type="submit" class="primary-btn">Calculate Result</button>
+          </form>
+        </section>
+
+        <section class="panel results-panel">
+          <h2>Result Summary</h2>
+
+          <div th:if="${#lists.isEmpty(results)}" class="empty-state">
+            No results available yet.
+          </div>
+
+          <div th:unless="${#lists.isEmpty(results)}" class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Student</th>
+                  <th>Reg No.</th>
+                  <th>Total</th>
+                  <th>%</th>
+                  <th>Grade</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr th:each="result : ${results}">
+                  <td th:text="${result.studentName}"></td>
+                  <td th:text="${result.registerNumber}"></td>
+                  <td th:text="${result.totalMarks}"></td>
+                  <td th:text="${result.percentage}"></td>
+                  <td th:text="${result.grade}"></td>
+                  <td>
+                    <span th:classappend="${result.status == 'PASS'} ? 'pass' : 'fail'" class="status-pill" th:text="${result.status}"></span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
